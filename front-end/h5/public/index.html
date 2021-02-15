@@ -1,8 +1,8 @@
 <!--
  * @Author: ly525
  * @Date: 2020-01-03 23:36:38
- * @LastEditors  : ly525
- * @LastEditTime : 2020-01-24 12:47:41
+ * @LastEditors: ly525
+ * @LastEditTime: 2020-05-03 13:49:20
  * @FilePath: /luban-h5/front-end/h5/public/index.html
  * @Github: https://github.com/ly525/luban-h5
  * @Description: Do not edit
@@ -13,7 +13,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>鲁班-H5</title>
     <meta content="拖拽生成,拖拽生成页面,页面可视化,鲁班可视化搭建平台,鲁班,鲁班H5,可视化搭建,可视化平台,可视化搭建平台,开源易企秀,开源人人秀,开源百度H5,lubanh5,luban-h5,webpage buiilder,page builder,h5 builder" name="keywords" />
@@ -25,11 +25,15 @@
     </style>
     <!-- <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/createjs@1.0.1/builds/1.0.0/createjs.min.js"></script>
+    <script src="https://unpkg.com/vconsole@3.3.4/dist/vconsole.min.js"></script>
     <script>
       // Note: 增加html userAgent标记，
       // windows启用下仿mac的滚动条样式。
       var doc = document.documentElement;
       doc.setAttribute('data-useragent', navigator.userAgent);
+      // init vConsole
+      var vConsole = new VConsole();
+      console.log('Hello world');
     </script>
   </head>
   <body>

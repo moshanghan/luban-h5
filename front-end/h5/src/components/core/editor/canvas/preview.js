@@ -4,26 +4,37 @@ import NodeWrapper from 'core/preview/node-wrapper.js'
  * preview h5 work module
  */
 export default {
-  props: ['elements', 'height'],
+  props: ['elements', 'height', 'work'],
   components: {
     NodeWrapper
   },
+  computed: {
+    // ...mapState('editor', {
+    //   work: state => state.work
+    // }),
+    releaseUrl () {
+      return `${window.location.origin}/works/preview/${this.work.id}`
+    }
+  },
   methods: {
-    renderPreview (h, elements) {
+    genEventHandlers (element) {
+      const Ctor = this.$options.components[element.uuid]
+      return element.getEventHandlers(Ctor)
+    },
+    renderPreview () {
+      const elements = this.elements || []
       const pageWrapperStyle = { height: this.height || '100%', position: 'relative' }
-      // 与 edit 组件保持样式一致
-      const data = {
-        style: {
-          width: '100%',
-          height: '100%'
-        }
-      }
       return (
         <div style={pageWrapperStyle}>
           {
             elements.map((element, index) => {
               return <node-wrapper element={element}>
-                {h(element.name, data)}
+                {
+                  this.$createElement(element.uuid, {
+                    ...element.getPreviewData({ isNodeWrapper: false }),
+                    nativeOn: this.genEventHandlers(element)
+                  })
+                }
               </node-wrapper>
             })
           }
@@ -32,6 +43,12 @@ export default {
     }
   },
   render (h) {
-    return this.renderPreview(h, this.elements)
+    // return <iframe
+    //   id="iframe-for-preview-1"
+    //   src={this.releaseUrl}
+    //   frameborder="0"
+    //   style="height: 100%;width: 100%;"
+    // ></iframe>
+    return this.renderPreview()
   }
 }

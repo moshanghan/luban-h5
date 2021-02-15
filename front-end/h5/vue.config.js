@@ -10,6 +10,7 @@
  */
 const path = require('path')
 const webpack = require('webpack')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 // const isProd = process.env.NODE_ENV === 'production'
 const target = 'http://localhost:1337'
 const engineOutputDir = path.join(__dirname, '../../back-end/h5-api/public/engine-assets')
@@ -21,6 +22,9 @@ switch (process.env.PAGE) {
   case 'ENGINE':
     page = {
       entry: 'src/engine-entry.js',
+      // template: 'public/engine.html',
+      // filename: 'engine.html',
+      // title: 'Engine Page',
       outputDir: engineOutputDir
     }
     break
@@ -38,12 +42,15 @@ switch (process.env.PAGE) {
       filename: 'index.html',
       title: 'Index Page',
       // outputDir: 'dist',
-      outputDir: mainAppOutputDir
+      outputDir: mainAppOutputDir,
       // publicPath: isProd ? '/main/' : '/'
+      plugins: [
+        new MonacoWebpackPlugin()
+      ]
     }
 }
 
-const configureWebpack = {
+let configureWebpack = {
   resolve: {
     alias: {
       '@': path.join(__dirname, 'src'),
@@ -58,6 +65,8 @@ const configureWebpack = {
   }
 }
 
+console.log(process.env.PAGE === 'ENGINE')
+
 module.exports = {
   outputDir: page.outputDir,
   publicPath: page.publicPath,
@@ -66,10 +75,13 @@ module.exports = {
   pages: { index: page },
   devServer: {
     proxy: {
-      '^/auth|upload|content-manager|users-permissions|works|admin|psd-files|workforms|third-libs|engine-assets/': {
+      '^/upload|content-manager|users-permissions|works|scripts|admin|psd-files|workforms|third-libs|engine-assets/': {
         target,
         changeOrigin: true,
         ws: false
+      },
+      '^/nCoV': {
+        target: 'https://lab.isaaclin.cn'
       }
     }
   },

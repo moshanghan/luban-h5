@@ -1,7 +1,6 @@
 <script>
-import { mapState, mapActions } from 'vuex'
 import QRCode from 'qrcode'
-
+import { mapState, mapActions } from 'vuex'
 import PreviewDialog from 'core/editor/modals/preview.vue'
 import CardCover from '@/components/common/work/card-cover.js'
 
@@ -125,10 +124,14 @@ export default {
   },
   data: () => ({
     activeWork: null,
-    previewVisible: false
+    previewVisible: false,
+
+    workList: [],
+    loading: false,
+    busy: false
   }),
   computed: {
-    ...mapState('editor', ['works']),
+    ...mapState('editor', []),
     ...mapState('loading', ['fetchWorks_loading'])
   },
   methods: {
@@ -139,7 +142,28 @@ export default {
   },
   render (h) {
     return (
-      <div class="works-wrapper">
+      <div class="workList-wrapper">
+        <VirtualList
+          onHandleInfiniteOnLoad={this.fetchData}
+          items={this.workList}
+          busy={this.busy}
+          loading={this.loading}
+          // https://github.com/vuejs/jsx/pull/56/files
+          // https://vuejs.org/v2/guide/components-slots.html#Abbreviated-Syntax-for-Lone-Default-Slots
+          // https://cn.vuejs.org/v2/guide/components-slots.html#%E5%B8%A6%E6%9C%89-slot-attribute-%E7%9A%84%E5%85%B7%E5%90%8D%E6%8F%92%E6%A7%BD
+          scopedSlots={{
+            default: ({ work } /** slotProps */) =>
+              <ListItemCard
+                work={work}
+                handleClickPreview={e => {
+                  this.previewVisible = true
+                  this.activeWork = work
+                }}
+
+                handleClickDelete={() => this.handleDeleteWork(work)}
+              />
+          }}
+        />
         <a-row gutter={12}>
           <a-col span={6} style="margin-bottom: 10px;">
             <AddNewCard handleCreate={this.createWork} />
@@ -174,7 +198,7 @@ export default {
     )
   },
   created () {
-    this.fetchWorks()
+    // this.fetchWorks()
   }
 }
 </script>

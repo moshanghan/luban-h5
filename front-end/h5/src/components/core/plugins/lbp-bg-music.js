@@ -56,7 +56,7 @@ export default {
   },
   created () {
     // 在初始化的时候，autoplay 控制是否播放
-    // 后面是否播放，由用户的点击行为决定
+    // 后面是否播放，由用户的点击动作决定
     this.isPlaying = this.autoplay
   }
 }

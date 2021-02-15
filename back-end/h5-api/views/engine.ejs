@@ -19,98 +19,13 @@
   <meta content="black" name="apple-mobile-web-app-status-bar-style">
   <meta content="telephone=no" name="format-detection">
   <meta content="email=no" name="format-detection">
-  <script src="/third-libs/vue.js"></script>
   <link rel="stylesheet" href="/third-libs/animate.min.css">
   <link rel="stylesheet" href="/third-libs/swiper.min.css">
   <script src="/third-libs/swiper.min.js"></script>
   <script src="/third-libs/swiper-animation.umd.min.js"></script>
   <script>window.__work = <%- JSON.stringify(work) %></script>
-  <script src="/engine-assets/engine.umd.min.js"></script>
   <style>
-    /*
-      scss 文件，用来生成下面一段 style 中的 css
-      css 在线转 css：https://www.sassmeister.com/
-    */
-    /* * {
-      outline: none;
-    }
-
-    .bg-wrapper {
-      width: 100%;
-      height: 100%;
-      background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
-    }
-
-    .preview-wrapper {
-      position: relative;
-      display: flex;
-      flex-wrap: nowrap;
-      width: 320px;
-      height: 568px;
-
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-
-      .phone-wrapper {
-        position: absolute;
-        width: 320px;
-        height: 568px;
-        display: inline-block;
-        background: #fff;
-        box-sizing: content-box;
-        border: 10px solid #f6f6f6;
-      }
-
-      .float-shortcuts {
-        position: absolute;
-        top: 100px;
-        right: 0;
-
-        .page-controller {
-          position: absolute;
-          left: 0 !important;
-          display: block;
-          box-sizing: border-box;
-          width: 22px;
-          height: 60px;
-          padding: 4px;
-          border-top-right-radius: 5px;
-          border-bottom-right-radius: 5px;
-
-          cursor: pointer;
-          background: #2096f9;
-          font-size: 12px;
-          border: 1px solid #2096f9;
-          color: #fff;
-
-          &.next {
-            top: 80px;
-          }
-        }
-      }
-
-      .work-info {
-        color: #4a4a4a;
-        font-size: 14px;
-        margin-left: 380px;
-
-        .qrcode-wrapper {
-          .qrcode-label {
-          }
-
-          .qrcode-img {
-          }
-        }
-      }
-    } */
-  </style>
-  <style>
-    * {
-      outline: none;
-    }
-
+    /* https://gist.github.com/ly525/bc771ec79f32510183eb716bcc1e803a */
     .bg-wrapper {
       width: 100%;
       height: 100%;
@@ -188,7 +103,6 @@
         <a class="page-controller swiper-button-next next">下一页</a>
       </div>
       <div id="app">
-        <engine />
       </div>
     </div>
     <div class="work-info">
@@ -252,10 +166,10 @@
   </script>
   <script>
     // Vue.component('engine', window.Engine)
-    new Vue({
-      el: '#app',
-      data: {},
-    });
+    // new Vue({
+    //   el: '#app',
+    //   data: {},
+    // });
   </script>
   <script>
     const swiperAnimation = new SwiperAnimation();
@@ -308,6 +222,7 @@
       window.attachEvent("onmessage", displayMessage);
     }
   </script>
+  <script src="/engine-assets/engine.umd.min.js"></script>
   <!-- build:js scripts/vendor.js -->
   <!-- endbuild -->
 </body>

@@ -58,7 +58,6 @@ export const actions = {
       successMsg: '删除作品成功',
       customRequest: strapi.deleteEntry.bind(strapi)
     }).delete('works', workId).catch(handleError)
-    // return strapi.deleteEntry('works', workId)
   },
   updateWork ({ commit, state }, payload = {}) {
     // update work with strapi
@@ -104,8 +103,8 @@ export const actions = {
       commit('setEditingPage')
     })
   },
-  fetchWorks ({ commit, dispatch, state }, workId) {
-    new AxiosWrapper({
+  fetchWorks ({ commit, dispatch, state }, payload = { is_template: false, _limit: 100 }) {
+    return new AxiosWrapper({
       dispatch,
       commit,
       name: 'editor/setWorks',

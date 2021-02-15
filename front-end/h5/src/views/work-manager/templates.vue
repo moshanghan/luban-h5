@@ -1,86 +1,8 @@
 <script>
 import { mapState, mapActions } from 'vuex'
-import QRCode from 'qrcode'
 
-import PreviewDialog from 'core/editor/modals/preview.vue'
-import CardCover from '@/components/common/work/card-cover.js'
-
-const ListItemCard = {
-  props: {
-    work: {
-      type: Object,
-      default: () => {}
-    },
-    handleClickEdit: {
-      type: Function,
-      default: () => {}
-    },
-    handleClickPreview: {
-      type: Function,
-      default: () => {}
-    },
-    handleUseTemplate: {
-      type: Function,
-      default: () => {}
-    }
-  },
-  data: () => ({
-    qrcodeUrl: ''
-  }),
-  methods: {
-    timeFmt (date) {
-      const dateTime = new Date(date)
-      const displayTime = `${dateTime.getFullYear()}-${dateTime.getMonth() +
-        1}-${dateTime.getDate()}`
-      return displayTime
-    },
-    genQRCodeUrl (work) {
-      const url = `${window.location.origin}/works/preview/${work.id}`
-      QRCode.toDataURL(url, (err, url) => {
-        if (err) console.log(err)
-        this.qrcodeUrl = url
-      })
-    }
-  },
-  render (h) {
-    return (
-      <a-card hoverable >
-        <CardCover slot="cover" qrcodeUrl={this.qrcodeUrl} coverImageUrl={this.work.cover_image_url} />
-        <template class="ant-card-actions" slot="actions">
-          <a-tooltip effect="dark" placement="bottom" title={this.$t('workCard.useNow')}>
-            <a-icon type="plus-square" title={this.$t('workCard.useNow')} onClick={() => {
-              this.handleUseTemplate(this.work)
-            }} />
-          </a-tooltip>
-          {/** 预览 */}
-          <a-tooltip effect="dark" placement="bottom" title={this.$t('workCard.preview')}>
-            <a-icon type="eye" title={this.$t('workCard.preview')} onClick={this.handleClickPreview} />
-          </a-tooltip>
-          {
-            this.qrcodeUrl
-              ? <a-icon type="close-circle" onClick={() => { this.qrcodeUrl = '' }} />
-              : <a-icon type="qrcode" onClick={() => this.genQRCodeUrl(this.work)} />
-          }
-          {/**
-          <a-icon type="setting" />
-          <a-icon type="ellipsis" />
-           */}
-        </template>
-        <a-card-meta
-        >
-          <div slot="title" class="ant-card-meta-title" style="font-size: 14px;">
-            {this.work.title}({this.work.id})
-          </div>
-          <div slot="description" style="font-size: 12px;">
-            {/** 描述 时间 */}
-            <div>{this.$t('workCard.description')}: {this.work.description}</div>
-            <div>{this.$t('workCard.createTime')}: {this.timeFmt(this.work.created_at)}</div>
-          </div>
-        </a-card-meta>
-      </a-card>
-    )
-  }
-}
+import PreviewDialog from '@/components/core/editor/modals/preview.vue'
+import ListItemCard from '@/components/common/work/card-item.js'
 
 export default {
   components: {
@@ -100,8 +22,15 @@ export default {
     ...mapActions('editor', [
       'fetchWorks',
       'fetchWorkTemplates',
-      'useTemplate'
-    ])
+      'useTemplate',
+      'deleteWork'
+    ]),
+    handleDeleteWork (work) {
+      this.deleteWork(work.id).then(res => {
+        const index = this.workTemplates.findIndex(item => item.id === work.id)
+        this.workTemplates.splice(index, 1)
+      })
+    }
   },
   render (h) {
     return (
@@ -114,7 +43,9 @@ export default {
               </a-col>
               : this.workTemplates.map(work => (
                 <a-col span={6} key={work.id} style="margin-bottom: 20px;">
-                  <ListItemCard work={work}
+                  <ListItemCard
+                    isTemplate={true}
+                    work={work}
                     handleClickPreview={e => {
                       this.previewVisible = true
                       this.activeWork = work
@@ -125,6 +56,7 @@ export default {
                         this.clonedWorkFromTemplate = clonedWork
                       })
                     }}
+                    handleClickDelete={() => this.handleDeleteWork(work)}
                   />
                 </a-col>
               ))
